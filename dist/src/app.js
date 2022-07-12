@@ -19,24 +19,28 @@ dotenv_1.default.config();
 const app = (0, express_1.default)();
 const port = process.env.PORT;
 const mongoURI = process.env.mongoURI;
-app.use('api/auth', require('../routes/auth.route'));
-function start() {
-    return __awaiter(this, void 0, void 0, function* () {
-        try {
-            yield mongoose.connect(mongoURI);
-            app.listen(port, () => {
-                console.log(`app is running on http://localhost:${port}/`);
-                process.exit(1);
-            });
-        }
-        catch (e) {
-            console.log(e);
-        }
-    });
-}
-start();
 let counter = 0;
 app.get('/', (req, res) => {
     counter++;
     res.send(`Express + TypeScript Server ${counter}`);
 });
+app.use(express_1.default.json());
+app.use('/api/auth', require('../routes/auth.route'));
+function start() {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            yield mongoose.connect(mongoURI, {
+                useNewUrlParser: true,
+                useUnifiedTopology: true,
+            });
+            app.listen(port, () => {
+                console.log(`app is running on http://localhost:${port}/`);
+            });
+        }
+        catch (e) {
+            console.log(e);
+            process.exit(1);
+        }
+    });
+}
+start();
