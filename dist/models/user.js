@@ -10,5 +10,6 @@ const userSchema = new mongoose_1.default.Schema({
     email: { type: String, unique: true, require: true, sparse: true },
     password: { type: String },
     token: { type: String },
+    role: { type: String, default: 'USER' },
 });
 module.exports = mongoose_1.default.model('User', userSchema);

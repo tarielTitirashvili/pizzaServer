@@ -1,14 +1,16 @@
-import express, { Express, Request, Response } from 'express';
-const mongoose = require('mongoose');
+import express, { Request, Response } from 'express';
 import dotenv from 'dotenv';
+const mongoose = require('mongoose');
+
 dotenv.config();
 
 declare global {
   namespace NodeJS {
     interface ProcessEnv {
       PORT: string;
-      mongoURI: string;
-      tokenKey: string;
+      MONGO_URI: string;
+      TOKEN_SECRET_KEY: string;
+      REFRESH_TOKEN_SECRET: string;
     }
   }
 }
@@ -16,22 +18,17 @@ declare global {
 const app = express();
 
 const port: string = process.env.PORT;
-const mongoURI: string = process.env.mongoURI;
-let counter: number = 0;
-app.get('/', (req: Request, res: Response) => {
-  counter++;
-  res.send(`Express + TypeScript Server ${counter}`);
-});
+
+const mongoURI: string = process.env.MONGO_URI;
 app.use(express.json());
 app.use('/api/auth', require('../routes/auth.route'));
-
 async function start() {
   try {
     await mongoose.connect(mongoURI, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
-    app.listen(port, () => {
+    app.listen(5000, () => {
       console.log(`app is running on http://localhost:${port}/`);
     });
   } catch (e) {

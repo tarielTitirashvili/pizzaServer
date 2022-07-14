@@ -13,17 +13,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const mongoose = require('mongoose');
 const dotenv_1 = __importDefault(require("dotenv"));
+const mongoose = require('mongoose');
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 const port = process.env.PORT;
-const mongoURI = process.env.mongoURI;
-let counter = 0;
-app.get('/', (req, res) => {
-    counter++;
-    res.send(`Express + TypeScript Server ${counter}`);
-});
+const mongoURI = process.env.MONGO_URI;
 app.use(express_1.default.json());
 app.use('/api/auth', require('../routes/auth.route'));
 function start() {
@@ -33,7 +28,7 @@ function start() {
                 useNewUrlParser: true,
                 useUnifiedTopology: true,
             });
-            app.listen(port, () => {
+            app.listen(5000, () => {
                 console.log(`app is running on http://localhost:${port}/`);
             });
         }

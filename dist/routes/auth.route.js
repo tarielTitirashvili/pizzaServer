@@ -15,12 +15,18 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const auth_token_middleware_1 = __importDefault(require("../middleware/auth.token.middleware"));
 const User = require('../models/user');
 const router = (0, express_1.default)();
 // api/auth
+router.post('/', auth_token_middleware_1.default, (req, res) => {
+    console.log(res.locals.jwt);
+    const user = res.locals.jwt;
+    return res.json({ message: 'Token is validated', user });
+});
 router.post('/register', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { name, last_name: lastName, email, password, token } = req.body;
+        const { name, last_name: lastName, email, password } = req.body;
         if (!(name && lastName && email && password)) {
             res.status(400).send('all inputs are required!!!');
         }
@@ -36,16 +42,40 @@ router.post('/register', (req, res) => __awaiter(void 0, void 0, void 0, functio
             email: email.toLowerCase(),
             password: encryptedPassword,
         });
-        const newToken = jsonwebtoken_1.default.sign({ user_id: user._id, email }, process.env.tokenKey, {
+        const { _id, email: userEmail, role, name: userName, last_name } = user;
+        const newToken = jsonwebtoken_1.default.sign({ _id, email: userEmail, role, name: userName, last_name }, process.env.TOKEN_SECRET_KEY, {
             expiresIn: '2h',
         });
-        user.token = token;
-        console.log(newToken);
+        user.token = newToken;
         res.status(201).json(user);
     }
     catch (e) {
         console.log(e);
     }
 }));
-router.post('/login', (req, res) => { });
+router.post('/login', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log(req.body);
+    try {
+        const { email, password } = req.body;
+        if (!(email && password)) {
+            return res.status(400).send('all fields are required');
+        }
+        const user = yield User.findOne({ email });
+        if (user !== null) {
+            const checkPass = yield bcryptjs_1.default.compare(password, user.password);
+            if (checkPass && email === user.email) {
+                const { name, email: regEmail, last_name, _id, role } = user;
+                const token = jsonwebtoken_1.default.sign({ name, email: regEmail, last_name, _id, role }, process.env.TOKEN_SECRET_KEY, {
+                    expiresIn: '2h',
+                });
+                user.token = token;
+                return res.status(200).send(user);
+            }
+        }
+        res.status(400).send('one of inputs is invalid');
+    }
+    catch (e) {
+        console.log(e);
+    }
+}));
 module.exports = router;

@@ -52,7 +52,7 @@
   "resolved" "https://registry.npmjs.org/@types/bcryptjs/-/bcryptjs-2.4.2.tgz"
   "version" "2.4.2"
 
-"@types/body-parser@*", "@types/body-parser@^1.19.2":
+"@types/body-parser@*":
   "integrity" "sha512-ALYone6pm6QmwZoAgeyNksccT9Q4AWZQ6PvfwR37GT6r6FWUPguq6sUmNGSMV2Wr761oQoBxwGGa6DR5o1DC9g=="
   "resolved" "https://registry.npmjs.org/@types/body-parser/-/body-parser-1.19.2.tgz"
   "version" "1.19.2"
@@ -224,7 +224,7 @@
   "resolved" "https://registry.npmjs.org/binary-extensions/-/binary-extensions-2.2.0.tgz"
   "version" "2.2.0"
 
-"body-parser@^1.20.0", "body-parser@1.20.0":
+"body-parser@1.20.0":
   "integrity" "sha512-DfJ+q6EPcGKZD1QWUjSpqp+Q7bDQTsQIF4zfUAtZ6qk+H/3/QRhg9CEp39ss+/T2vw0+HaidC0ecJj/DRLIaKg=="
   "resolved" "https://registry.npmjs.org/body-parser/-/body-parser-1.20.0.tgz"
   "version" "1.20.0"
@@ -1283,7 +1283,7 @@
     "ts-node" "^10.4.0"
     "tsconfig" "^7.0.0"
 
-"ts-node@^10.4.0":
+"ts-node@^10.4.0", "ts-node@^10.8.2":
   "integrity" "sha512-LYdGnoGddf1D6v8REPtIH+5iq/gTDuZqv2/UJUU7tKjuEU8xVZorBM+buCGNjj+pGEud+sOoM4CX3/YzINpENA=="
   "resolved" "https://registry.npmjs.org/ts-node/-/ts-node-10.8.2.tgz"
   "version" "10.8.2"
