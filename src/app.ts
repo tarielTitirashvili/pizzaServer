@@ -1,6 +1,6 @@
-import express, { Request, Response } from 'express';
+import express from 'express';
 import dotenv from 'dotenv';
-const mongoose = require('mongoose');
+import mongoose, { ConnectOptions } from 'mongoose';
 
 dotenv.config();
 
@@ -21,13 +21,13 @@ const port: string = process.env.PORT;
 
 const mongoURI: string = process.env.MONGO_URI;
 app.use(express.json());
-app.use('/api/auth', require('../routes/auth.route'));
+app.use('/api/auth', require('./routes/auth.route'));
 async function start() {
   try {
     await mongoose.connect(mongoURI, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
-    });
+    } as ConnectOptions);
     app.listen(5000, () => {
       console.log(`app is running on http://localhost:${port}/`);
     });

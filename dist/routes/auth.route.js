@@ -1,81 +1,15 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const express_1 = __importDefault(require("express"));
-const bcryptjs_1 = __importDefault(require("bcryptjs"));
-const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const express_1 = require("express");
 const auth_token_middleware_1 = __importDefault(require("../middleware/auth.token.middleware"));
-const User = require('../models/user');
-const router = (0, express_1.default)();
+const userControllers_1 = __importDefault(require("../controllers/userControllers"));
+console.log(userControllers_1.default.validateToken);
+const router = (0, express_1.Router)();
 // api/auth
-router.post('/', auth_token_middleware_1.default, (req, res) => {
-    console.log(res.locals.jwt);
-    const user = res.locals.jwt;
-    return res.json({ message: 'Token is validated', user });
-});
-router.post('/register', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const { name, last_name: lastName, email, password } = req.body;
-        if (!(name && lastName && email && password)) {
-            res.status(400).send('all inputs are required!!!');
-        }
-        // check email in DB
-        const oldUser = yield User.findOne({ email });
-        if (oldUser) {
-            return res.status(400).send('user with this email already exist!');
-        }
-        const encryptedPassword = yield bcryptjs_1.default.hash(password, 10);
-        const user = yield User.create({
-            name,
-            last_name: lastName,
-            email: email.toLowerCase(),
-            password: encryptedPassword,
-        });
-        const { _id, email: userEmail, role, name: userName, last_name } = user;
-        const newToken = jsonwebtoken_1.default.sign({ _id, email: userEmail, role, name: userName, last_name }, process.env.TOKEN_SECRET_KEY, {
-            expiresIn: '2h',
-        });
-        user.token = newToken;
-        res.status(201).json(user);
-    }
-    catch (e) {
-        console.log(e);
-    }
-}));
-router.post('/login', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log(req.body);
-    try {
-        const { email, password } = req.body;
-        if (!(email && password)) {
-            return res.status(400).send('all fields are required');
-        }
-        const user = yield User.findOne({ email });
-        if (user !== null) {
-            const checkPass = yield bcryptjs_1.default.compare(password, user.password);
-            if (checkPass && email === user.email) {
-                const { name, email: regEmail, last_name, _id, role } = user;
-                const token = jsonwebtoken_1.default.sign({ name, email: regEmail, last_name, _id, role }, process.env.TOKEN_SECRET_KEY, {
-                    expiresIn: '2h',
-                });
-                user.token = token;
-                return res.status(200).send(user);
-            }
-        }
-        res.status(400).send('one of inputs is invalid');
-    }
-    catch (e) {
-        console.log(e);
-    }
-}));
+router.post('/', auth_token_middleware_1.default, userControllers_1.default.validateToken);
+router.post('/register', userControllers_1.default.registration);
+router.post('/login', userControllers_1.default.login);
 module.exports = router;

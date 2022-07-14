@@ -17,7 +17,6 @@ const verifyToken = (req, res, next) => {
             }
             else {
                 if (user !== undefined) {
-                    console.log(res.locals.jwt);
                     res.locals.jwt = user;
                     next();
                 }
