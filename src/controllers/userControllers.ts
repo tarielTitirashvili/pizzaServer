@@ -75,9 +75,9 @@ const registration = async (req: Request<{}, {}, ReqBody>, res: Response, next: 
   }
 };
 
-const allUsers = (req: Request, res: Response) => {
+const allUsers = async (req: Request, res: Response) => {
   try {
-    User.find()
+    await User.find()
       .select('-password')
       .select('-role')
       .exec()
@@ -94,9 +94,21 @@ const allUsers = (req: Request, res: Response) => {
     });
   }
 };
+const deleteUser = async (req: Request, res: Response) => {
+  try {
+    const deletedUser = await User.findOneAndDelete({ email: req.params.email });
+    return res.json({ deletedUser });
+  } catch (e) {
+    res.json({
+      message: 'delete was unsuccessful',
+      e,
+    });
+  }
+};
 export default {
   validateToken,
   login,
   registration,
   allUsers,
+  deleteUser,
 };

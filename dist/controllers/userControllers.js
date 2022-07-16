@@ -74,9 +74,9 @@ const registration = (req, res, next) => __awaiter(void 0, void 0, void 0, funct
         res.json({ e });
     }
 });
-const allUsers = (req, res) => {
+const allUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        user_1.default.find()
+        yield user_1.default.find()
             .select('-password')
             .select('-role')
             .exec()
@@ -93,10 +93,23 @@ const allUsers = (req, res) => {
             e,
         });
     }
-};
+});
+const deleteUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const deletedUser = yield user_1.default.findOneAndDelete({ email: req.params.email });
+        return res.json({ deletedUser });
+    }
+    catch (e) {
+        res.json({
+            message: 'delete was unsuccessful',
+            e,
+        });
+    }
+});
 exports.default = {
     validateToken,
     login,
     registration,
     allUsers,
+    deleteUser,
 };
