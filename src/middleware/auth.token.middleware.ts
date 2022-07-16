@@ -1,26 +1,16 @@
 import { Request, Response, NextFunction } from 'express';
-import JWT from 'jsonwebtoken';
+import checkToken from '../functions/CheckToken';
 
 const verifyToken = (req: Request, res: Response, next: NextFunction) => {
-  const ReqToken: string = req.body.token || req.query.token || req.headers['authentication'];
-  if (!ReqToken) {
+  const reqToken: string = req.body.token || req.query.token || req.headers['authentication'];
+  if (!reqToken) {
     return res.status(403).send('A token is required for authentication');
   }
-  const token: string = ReqToken.split(' ')[1];
-
   try {
-    JWT.verify(token, process.env.TOKEN_SECRET_KEY, (err, user) => {
-      if (err) {
-        return res.status(500).json({ message: 'Unauthorized' });
-      } else {
-        if (user !== undefined) {
-          res.locals.jwt = user;
-          next();
-        }
-      }
-    });
-  } catch (err) {
-    return res.status(401).json({ message: 'Unauthorized' });
+    const user = checkToken(reqToken);
+    res.locals.jwt = user;
+  } catch (e) {
+    res.status(401).json({ e });
   }
   return next();
 };

@@ -21,6 +21,7 @@ const port = process.env.PORT;
 const mongoURI = process.env.MONGO_URI;
 app.use(express_1.default.json());
 app.use('/api/auth', require('./routes/auth.route'));
+app.use('/api/products', require('./routes/products.route'));
 function start() {
     return __awaiter(this, void 0, void 0, function* () {
         try {

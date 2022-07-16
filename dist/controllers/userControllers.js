@@ -22,6 +22,7 @@ const generateToken = (_id, name, last_name, email, role) => {
 };
 const validateToken = (req, res) => {
     const user = res.locals.jwt;
+    console.log(user);
     res.json({ message: 'Token is validated', user });
 };
 const login = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
@@ -62,6 +63,7 @@ const registration = (req, res, next) => __awaiter(void 0, void 0, void 0, funct
             last_name: lastName,
             email: email.toLowerCase(),
             password: encryptedPassword,
+            role: role,
         });
         const { _id, email: userEmail, role: userRole, name: userName, last_name } = user;
         const newToken = generateToken(_id, userName, last_name, userEmail, userRole);

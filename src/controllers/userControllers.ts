@@ -11,7 +11,7 @@ const generateToken = (
   last_name: string,
   email: string,
   role: string,
-) => {
+): string => {
   return JWT.sign({ _id, name, last_name, email, role }, process.env.TOKEN_SECRET_KEY, {
     expiresIn: '4h',
   });
@@ -19,6 +19,7 @@ const generateToken = (
 
 const validateToken = (req: Request, res: Response) => {
   const user: IUser = res.locals.jwt;
+  console.log(user);
   res.json({ message: 'Token is validated', user });
 };
 const login = async (req: Request<{}, {}, LoginBody>, res: Response, next: NextFunction) => {
@@ -60,6 +61,7 @@ const registration = async (req: Request<{}, {}, ReqBody>, res: Response, next: 
       last_name: lastName,
       email: email.toLowerCase(),
       password: encryptedPassword,
+      role: role,
     });
     const { _id, email: userEmail, role: userRole, name: userName, last_name } = user;
 

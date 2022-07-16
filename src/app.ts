@@ -22,6 +22,7 @@ const port: string = process.env.PORT;
 const mongoURI: string = process.env.MONGO_URI;
 app.use(express.json());
 app.use('/api/auth', require('./routes/auth.route'));
+app.use('/api/products', require('./routes/products.route'));
 async function start() {
   try {
     await mongoose.connect(mongoURI, {
