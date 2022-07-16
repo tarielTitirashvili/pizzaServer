@@ -2,7 +2,7 @@ import { ObjectId } from 'mongoose';
 import { Types, Document } from 'mongoose';
 
 export interface IUser extends Document {
-  _id?: Types.ObjectId;
+  _id: Types.ObjectId;
   name: string;
   last_name: string;
   email: string;
@@ -26,6 +26,7 @@ export interface LoginBody {
 }
 
 export interface ReqBody extends LoginBody {
+  role: 'ADMIN' | 'user' | undefined;
   name: string;
   last_name: string;
 }

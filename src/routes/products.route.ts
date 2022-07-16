@@ -4,9 +4,9 @@ import controllers from '../controllers/userControllers';
 
 const router = Router();
 // api/auth
-router.get('/allUsers', controllers.allUsers);
-router.post('/', verifyToken, controllers.validateToken);
-router.post('/register', controllers.registration);
-router.post('/login', controllers.login);
+router.get('/product', controllers.allUsers);
+router.post('/product', controllers.registration);
+router.put('/product', controllers.registration);
+router.delete('/product', controllers.login);
 
 module.exports = router;

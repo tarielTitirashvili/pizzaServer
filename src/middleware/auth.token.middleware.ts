@@ -14,7 +14,6 @@ const verifyToken = (req: Request, res: Response, next: NextFunction) => {
         return res.status(500).json({ message: 'Unauthorized' });
       } else {
         if (user !== undefined) {
-          console.log(res.locals.jwt);
           res.locals.jwt = user;
           next();
         }
