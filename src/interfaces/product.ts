@@ -1,4 +1,4 @@
-interface BaseProduct {
+interface IBaseProduct {
   id: number;
   images: string[];
   title: string;
@@ -7,14 +7,14 @@ interface BaseProduct {
   price: number;
 }
 
-export interface Product extends BaseProduct {
+export interface IProduct extends IBaseProduct {
   types: number[];
   sizes: number[];
 }
-export interface SelectedProduct extends BaseProduct {
+export interface ISelectedProduct extends IBaseProduct {
   types: number;
   sizes: number;
 }
-export interface CartProduct extends SelectedProduct {
+export interface ICartProduct extends ISelectedProduct {
   quantity: number;
 }

@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { IUser, LoginBody, ReqBody } from '../interfaces/user';
+import { IUser, ILoginBody, IReqBody } from '../interfaces/user';
 import bcrypt from 'bcryptjs';
 import JWT from 'jsonwebtoken';
 import User from '../models/user';
@@ -22,7 +22,7 @@ const validateToken = (req: Request, res: Response) => {
   console.log(user);
   res.json({ message: 'Token is validated', user });
 };
-const login = async (req: Request<{}, {}, LoginBody>, res: Response, next: NextFunction) => {
+const login = async (req: Request<{}, {}, ILoginBody>, res: Response, next: NextFunction) => {
   try {
     const { email, password } = req.body;
     if (!(email && password)) {
@@ -42,7 +42,7 @@ const login = async (req: Request<{}, {}, LoginBody>, res: Response, next: NextF
     console.log(e);
   }
 };
-const registration = async (req: Request<{}, {}, ReqBody>, res: Response, next: NextFunction) => {
+const registration = async (req: Request<{}, {}, IReqBody>, res: Response, next: NextFunction) => {
   try {
     const { name, last_name: lastName, email, password, role } = req.body;
     if (!(name && lastName && email && password)) {
@@ -96,7 +96,8 @@ const allUsers = async (req: Request, res: Response) => {
 };
 const deleteUser = async (req: Request, res: Response) => {
   try {
-    const deletedUser = await User.findOneAndDelete({ email: req.params.email });
+    const email: string = req.params.email;
+    const deletedUser = await User.findOneAndDelete({ email });
     return res.json({ deletedUser });
   } catch (e) {
     res.json({

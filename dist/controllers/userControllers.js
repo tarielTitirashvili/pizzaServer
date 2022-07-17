@@ -96,7 +96,8 @@ const allUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 });
 const deleteUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const deletedUser = yield user_1.default.findOneAndDelete({ email: req.params.email });
+        const email = req.params.email;
+        const deletedUser = yield user_1.default.findOneAndDelete({ email });
         return res.json({ deletedUser });
     }
     catch (e) {
