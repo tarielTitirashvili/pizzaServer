@@ -4,6 +4,16 @@ import Category from '../models/category';
 
 const getAll = async (req: Request, res: Response) => {
   try {
+    await Category.find()
+      .select(['category'])
+      .exec()
+      .then((categories) => {
+        console.log(categories);
+        res.json({
+          categories,
+          count: categories.length,
+        });
+      });
   } catch (e) {
     res.json({
       message: "could't get users",

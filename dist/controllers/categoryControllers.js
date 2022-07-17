@@ -15,6 +15,16 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const category_1 = __importDefault(require("../models/category"));
 const getAll = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        yield category_1.default.find()
+            .select(['category'])
+            .exec()
+            .then((categories) => {
+            console.log(categories);
+            res.json({
+                categories,
+                count: categories.length,
+            });
+        });
     }
     catch (e) {
         res.json({

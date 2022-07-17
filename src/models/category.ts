@@ -6,4 +6,4 @@ const category = new mongoose.Schema({
   products: [String],
 });
 
-export default mongoose.model<TCategory>('Product', category);
+export default mongoose.model<TCategory>('Category', category);

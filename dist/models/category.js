@@ -8,4 +8,4 @@ const category = new mongoose_1.default.Schema({
     category: { type: String, unique: true },
     products: [String],
 });
-exports.default = mongoose_1.default.model('Product', category);
+exports.default = mongoose_1.default.model('Category', category);
