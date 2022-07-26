@@ -1,9 +1,9 @@
-import mongoose from 'mongoose';
+import { Schema, model } from 'mongoose';
 import { TCategory } from '../interfaces/category';
 
-const category = new mongoose.Schema({
+const category = new Schema({
   category: { type: String, unique: true },
-  products: [String],
+  products: [{ type: Schema.Types.ObjectId, ref: 'Product' }],
 });
 
-export default mongoose.model<TCategory>('Category', category);
+export default model<TCategory>('Category', category);

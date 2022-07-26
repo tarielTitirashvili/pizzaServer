@@ -80,7 +80,6 @@ const allUsers = async (req: Request, res: Response) => {
     await User.find()
       .select('-password')
       .select('-role')
-      .exec()
       .then((users) => {
         res.json({
           users,
@@ -106,10 +105,30 @@ const deleteUser = async (req: Request, res: Response) => {
     });
   }
 };
+const changePassword = async (req: Request<{}, {}, ILoginBody>, res: Response) => {
+  try {
+    const authEmail: string = res.locals.jwt.email;
+    const { email, password } = req.body;
+    if (authEmail === email) {
+      const newPassword = await bcrypt.hash(password, 10);
+      const updatedUser = await User.findOneAndUpdate({ email }, { password: newPassword });
+      return res.status(201).json({ updatedUser });
+    } else {
+      res.status(400).json({ message: 'bed request' });
+    }
+  } catch (e) {
+    res.json({
+      message: 'delete was unsuccessful',
+      e,
+    });
+  }
+};
+
 export default {
   validateToken,
   login,
   registration,
   allUsers,
   deleteUser,
+  changePassword,
 };

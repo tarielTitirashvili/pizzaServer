@@ -79,7 +79,6 @@ const allUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         yield user_1.default.find()
             .select('-password')
             .select('-role')
-            .exec()
             .then((users) => {
             res.json({
                 users,
@@ -107,10 +106,31 @@ const deleteUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         });
     }
 });
+const changePassword = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const authEmail = res.locals.jwt.email;
+        const { email, password } = req.body;
+        if (authEmail === email) {
+            const newPassword = yield bcryptjs_1.default.hash(password, 10);
+            const updatedUser = yield user_1.default.findOneAndUpdate({ email }, { password: newPassword });
+            return res.status(201).json({ updatedUser });
+        }
+        else {
+            res.status(400).json({ message: 'bed request' });
+        }
+    }
+    catch (e) {
+        res.json({
+            message: 'delete was unsuccessful',
+            e,
+        });
+    }
+});
 exports.default = {
     validateToken,
     login,
     registration,
     allUsers,
     deleteUser,
+    changePassword,
 };

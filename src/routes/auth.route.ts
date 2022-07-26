@@ -10,5 +10,6 @@ router.post('/', verifyToken, controllers.validateToken);
 router.post('/register', controllers.registration);
 router.post('/login', controllers.login);
 router.delete('/delete/:email', checkRoleMiddleware, controllers.deleteUser);
+router.put('/changePassword', verifyToken, controllers.changePassword);
 
 module.exports = router;

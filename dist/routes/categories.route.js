@@ -10,5 +10,5 @@ const router = (0, express_1.Router)();
 // api/auth
 router.get('/', categoryControllers_1.default.getAll);
 router.post('/:category/create', role_middleware_1.default, categoryControllers_1.default.create);
-router.delete('/:category/:delete', role_middleware_1.default, categoryControllers_1.default.deleteCategory);
+router.delete('/:category/delete', role_middleware_1.default, categoryControllers_1.default.deleteCategory);
 module.exports = router;

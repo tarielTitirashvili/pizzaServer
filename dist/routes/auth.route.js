@@ -14,4 +14,5 @@ router.post('/', auth_token_middleware_1.default, userControllers_1.default.vali
 router.post('/register', userControllers_1.default.registration);
 router.post('/login', userControllers_1.default.login);
 router.delete('/delete/:email', role_middleware_1.default, userControllers_1.default.deleteUser);
+router.put('/changePassword', auth_token_middleware_1.default, userControllers_1.default.changePassword);
 module.exports = router;
