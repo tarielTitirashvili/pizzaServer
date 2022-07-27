@@ -67,9 +67,7 @@ const registration = async (req: Request<{}, {}, IReqBody>, res: Response, next:
 
     const newToken = generateToken(_id, userName, last_name, userEmail, userRole);
 
-    user.token = newToken;
-
-    res.status(201).json(user);
+    res.status(201).json({ user, token: newToken });
   } catch (e) {
     res.json({ e });
   }

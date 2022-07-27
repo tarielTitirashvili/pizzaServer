@@ -7,8 +7,9 @@ const express_1 = require("express");
 const categoryControllers_1 = __importDefault(require("../controllers/categoryControllers"));
 const role_middleware_1 = __importDefault(require("../middleware/role.middleware"));
 const router = (0, express_1.Router)();
-// api/auth
+// api/category
 router.get('/', categoryControllers_1.default.getAll);
-router.post('/:category/create', role_middleware_1.default, categoryControllers_1.default.create);
-router.delete('/:category/delete', role_middleware_1.default, categoryControllers_1.default.deleteCategory);
+router.post('/:category', role_middleware_1.default, categoryControllers_1.default.create);
+router.delete('/:category', role_middleware_1.default, categoryControllers_1.default.deleteCategory);
+router.put('/:category/:id', role_middleware_1.default, categoryControllers_1.default.addProduct);
 module.exports = router;

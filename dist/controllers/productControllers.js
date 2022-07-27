@@ -12,10 +12,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const category_1 = __importDefault(require("../models/category"));
+const product_1 = __importDefault(require("../models/product"));
 const getAll = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        yield category_1.default.find()
+        yield product_1.default.find()
             .select(['category'])
             .exec()
             .then((categories) => {
@@ -33,14 +33,20 @@ const getAll = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         });
     }
 });
-const create = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const newCategory = req.params.category;
+const create = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { images, title, category, rating, price, types, sizes } = req.body;
     try {
-        const createdCategory = yield category_1.default.create({
-            category: newCategory,
+        const createProduct = yield product_1.default.create({
+            images,
+            title,
+            category,
+            rating,
+            price,
+            types,
+            sizes,
         });
         res.status(200).json({
-            createdCategory,
+            createProduct,
         });
     }
     catch (e) {
@@ -50,7 +56,7 @@ const create = (req, res, next) => __awaiter(void 0, void 0, void 0, function* (
 const deleteCategory = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const category = req.params.category;
     try {
-        const deletedCategory = yield category_1.default.findOneAndDelete({
+        const deletedCategory = yield product_1.default.findOneAndDelete({
             category: category,
         });
         if (deleteCategory !== null) {
@@ -63,36 +69,8 @@ const deleteCategory = (req, res) => __awaiter(void 0, void 0, void 0, function*
         res.json({ message: "couldn't delete category", e });
     }
 });
-const addProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { category, id } = req.params;
-    try {
-        const dbCategory = yield category_1.default.findOne({ category });
-        if (dbCategory) {
-            const addProduct = yield category_1.default.findOneAndUpdate({
-                category: category,
-            }, {
-                products: (dbCategory === null || dbCategory === void 0 ? void 0 : dbCategory.products.length) > 0 ? [...dbCategory === null || dbCategory === void 0 ? void 0 : dbCategory.products, id] : [id],
-            });
-            if (deleteCategory !== null) {
-                res.status(200).json({
-                    addProduct,
-                });
-            }
-            else {
-                res.status(500).json({ message: 'internal server error' });
-            }
-        }
-        else {
-            res.status(400).json({ message: "requested category don't exists" });
-        }
-    }
-    catch (e) {
-        res.json({ message: "couldn't update product", e });
-    }
-});
 exports.default = {
     getAll,
     create,
     deleteCategory,
-    addProduct,
 };

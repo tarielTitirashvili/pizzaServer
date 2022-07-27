@@ -1,10 +1,11 @@
-import { NextFunction, Request, Response } from 'express';
+import { Request, Response } from 'express';
 import { TCategory } from '../interfaces/category';
-import Category from '../models/category';
+import { IProduct } from '../interfaces/product';
+import Product from '../models/product';
 
 const getAll = async (req: Request, res: Response) => {
   try {
-    await Category.find()
+    await Product.find()
       .select(['category'])
       .exec()
       .then((categories) => {
@@ -21,12 +22,20 @@ const getAll = async (req: Request, res: Response) => {
     });
   }
 };
-const create = async (req: Request, res: Response, next: NextFunction) => {
-  const { images, title, category, rating, price, types, sizes, quantity } = req.query;
+const create = async (req: Request<{}, {}, IProduct>, res: Response) => {
+  const { images, title, category, rating, price, types, sizes } = req.body;
   try {
-    const createdCategory: TCategory = await Category.create({});
+    const createProduct = await Product.create<IProduct>({
+      images,
+      title,
+      category,
+      rating,
+      price,
+      types,
+      sizes,
+    });
     res.status(200).json({
-      createdCategory,
+      createProduct,
     });
   } catch (e) {
     res.json({ message: "couldn't create category", e });
@@ -35,7 +44,7 @@ const create = async (req: Request, res: Response, next: NextFunction) => {
 const deleteCategory = async (req: Request, res: Response) => {
   const category: string = req.params.category;
   try {
-    const deletedCategory: TCategory | null = await Category.findOneAndDelete({
+    const deletedCategory: TCategory | null = await Product.findOneAndDelete({
       category: category,
     });
     if (deleteCategory !== null) {

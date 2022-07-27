@@ -1,3 +1,4 @@
+import { ObjectId } from 'mongoose';
 import { NextFunction, Request, Response } from 'express';
 import { TCategory } from '../interfaces/category';
 import Category from '../models/category';
@@ -49,8 +50,36 @@ const deleteCategory = async (req: Request, res: Response) => {
     res.json({ message: "couldn't delete category", e });
   }
 };
+const addProduct = async (req: Request, res: Response) => {
+  const { category, id } = req.params;
+  try {
+    const dbCategory: TCategory | null = await Category.findOne({ category });
+    if (dbCategory) {
+      const addProduct: TCategory | null = await Category.findOneAndUpdate(
+        {
+          category: category,
+        },
+        {
+          products: dbCategory?.products.length > 0 ? [...dbCategory?.products, id] : [id],
+        },
+      );
+      if (deleteCategory !== null) {
+        res.status(200).json({
+          addProduct,
+        });
+      } else {
+        res.status(500).json({ message: 'internal server error' });
+      }
+    } else {
+      res.status(400).json({ message: "requested category don't exists" });
+    }
+  } catch (e) {
+    res.json({ message: "couldn't update product", e });
+  }
+};
 export default {
   getAll,
   create,
   deleteCategory,
+  addProduct,
 };

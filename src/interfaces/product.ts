@@ -1,20 +1,22 @@
+import { Types } from 'mongoose';
+
 interface IBaseProduct {
-  id: number;
-  images: string[];
+  _id?: Types.ObjectId;
+  images?: string[];
   title: string;
-  category: number;
-  rating: number;
-  price: number;
+  category?: string;
+  rating?: number;
+  price?: number;
 }
 
 export interface IProduct extends IBaseProduct {
-  types: number[];
-  sizes: number[];
+  types?: number[];
+  sizes?: number[];
 }
 export interface ISelectedProduct extends IBaseProduct {
-  types: number;
-  sizes: number;
+  types?: number;
+  sizes?: number;
 }
 export interface ICartProduct extends ISelectedProduct {
-  quantity: number;
+  quantity?: number;
 }

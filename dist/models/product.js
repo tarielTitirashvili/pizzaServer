@@ -6,12 +6,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
 const productSchema = new mongoose_1.default.Schema({
     images: [String],
-    title: { type: String },
+    title: { type: String, require: true },
     category: { type: String },
-    rating: { type: Number },
+    rating: { type: Number, default: 0 },
     price: { type: Number },
     types: [String],
     sizes: [Number],
-    quantity: { type: Number },
 });
 exports.default = mongoose_1.default.model('Product', productSchema);

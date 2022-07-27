@@ -67,8 +67,7 @@ const registration = (req, res, next) => __awaiter(void 0, void 0, void 0, funct
         });
         const { _id, email: userEmail, role: userRole, name: userName, last_name } = user;
         const newToken = generateToken(_id, userName, last_name, userEmail, userRole);
-        user.token = newToken;
-        res.status(201).json(user);
+        res.status(201).json({ user, token: newToken });
     }
     catch (e) {
         res.json({ e });

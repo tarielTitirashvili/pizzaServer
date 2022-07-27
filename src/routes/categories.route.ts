@@ -3,9 +3,10 @@ import controllers from '../controllers/categoryControllers';
 import checkRoleMiddleware from '../middleware/role.middleware';
 
 const router = Router();
-// api/auth
+// api/category
 router.get('/', controllers.getAll);
-router.post('/:category/create', checkRoleMiddleware, controllers.create);
-router.delete('/:category/delete', checkRoleMiddleware, controllers.deleteCategory);
+router.post('/:category', checkRoleMiddleware, controllers.create);
+router.delete('/:category', checkRoleMiddleware, controllers.deleteCategory);
+router.put('/:category/:id', checkRoleMiddleware, controllers.addProduct);
 
 module.exports = router;
